@@ -23,15 +23,11 @@ export default {
         "airtel.bigota.d.miui.com"
     ];
 
-    if (url && url.host) {
-      for (const domain of domains) {
-        if (url.host.includes(domain)) {
-          url.host = "bkt-sgp-miui-ota-update-alisgp.oss-ap-southeast-1.aliyuncs.com";
-          break;
-        }
+    for (const domain of domains) {
+      if (url.includes(domain)) {
+        url = url.replace(domain, "bkt-sgp-miui-ota-update-alisgp.oss-ap-southeast-1.aliyuncs.com");
+        break;
       }
-    } else {
-      return new Response("\nInvalid or missing 'url' parameter.\n", { status: 400 });
     }
 
     if (url.pathname.includes(".zip")) {
