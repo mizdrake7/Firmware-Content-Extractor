@@ -76,7 +76,7 @@ jobs:
       - name: init_boot_img
         if: ${{ env.GET == 'init_boot_img' }}
         run: |
-          if [ ! -f "boot.img" ]; then
+          if [ ! -f "init_boot.img" ]; then
             ./tools/payload_dumper.py --out . --images init_boot payload.bin
           fi
           7z a "${NAME}" init_boot.img
