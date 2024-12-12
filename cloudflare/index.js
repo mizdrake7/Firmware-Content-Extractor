@@ -2,7 +2,7 @@ export default {
   async fetch(req, env) {
     const urlParams = new URLSearchParams(req.url.split('?')[1]);
     const get = urlParams.get('get');
-    const url = urlParams.get('url');
+    let url = urlParams.get('url');
 
     if (!get || !url) {
       return new Response("\nMissing parameters!\n\nUsage: \ncurl fce.offici5l.workers.dev?get=<boot_img|settings_apk|init_boot_img>&url=<url>\n\nExample:\n curl fce.offici5l.workers.dev?get=boot_img&url=https://example.com/file.zip\n\n", { status: 400 });
