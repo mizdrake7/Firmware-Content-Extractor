@@ -12,6 +12,28 @@ export default {
       return new Response("\nOnly 'boot_img', 'settings_apk', and 'init_boot_img' are allowed for 'get' parameter.\n", { status: 400 });
     }
 
+    const domains = [
+        "ultimateota.d.miui.com", 
+        "superota.d.miui.com", 
+        "bigota.d.miui.com", 
+        "cdnorg.d.miui.com", 
+        "bn.d.miui.com", 
+        "hugeota.d.miui.com",
+        "cdn-ota.azureedge.net",
+        "airtel.bigota.d.miui.com"
+    ];
+
+    for (const domain of domains) {
+        if (url.host.includes(domain)) {
+            url.host = "bkt-sgp-miui-ota-update-alisgp.oss-ap-southeast-1.aliyuncs.com";
+            break;
+        }
+    }
+
+    if (url.pathname.includes(".zip")) {
+        url.pathname = url.pathname.split(".zip")[0] + ".zip";
+    }
+
     if (!url.endsWith(".zip")) {
       return new Response("\nOnly .zip URLs are supported.\n", { status: 400 });
     }
