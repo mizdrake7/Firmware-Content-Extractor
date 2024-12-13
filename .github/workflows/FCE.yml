@@ -90,7 +90,7 @@ jobs:
 
       - name: upload
         run: |
-          if ! gh release view "$GET"; then
-            gh release create "$GET" --title "$GET"
-          fi
+          # if ! gh release view "$GET"; then
+            # gh release create "$GET" --title "$GET"
+          # fi
           gh release upload "$GET" "${NAME}" --clobber
