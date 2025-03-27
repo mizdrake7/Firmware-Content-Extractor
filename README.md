@@ -1,7 +1,7 @@
 ### Firmware-Content-Extractor  
 **Extract files from firmware without downloading the full firmware**
 
-- **option**: `boot_img` or `settings_apk` or `init_boot_img`
+- **option**: `boot_img` or `settings_apk` or `init_boot_img` or `vendor_boot`
 
 - **url**: The URL to the `.zip` firmware file.
 
