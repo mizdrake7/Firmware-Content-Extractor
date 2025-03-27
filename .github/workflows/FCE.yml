@@ -24,7 +24,7 @@ jobs:
 
       - name: validate
         run: |
-          [[ "$GET" == "settings_apk" || "$GET" == "boot_img" || "$GET" == "init_boot_img" ]] || { echo "Only 'settings_apk', 'boot_img', or 'init_boot_img' are allowed."; exit 1; }
+          [[ "$GET" == "settings_apk" || "$GET" == "boot_img" || "$GET" == "init_boot_img" || "$GET" == "vendor_boot" ]] || { echo "Only 'settings_apk', 'boot_img', 'init_boot_img', or 'vendor_boot' are allowed."; exit 1; }
           curl --head --fail "$URL" && [[ "$URL" == *.zip ]] || { echo "Invalid or inaccessible URL."; exit 1; }
           NAME=${GET}_$(basename "$URL")
           status_code=$(curl -o /dev/null -s -w "%{http_code}" -L "https://github.com/${GITHUB_REPOSITORY}/releases/download/${GET}/${NAME}")
@@ -81,6 +81,14 @@ jobs:
           fi
           7z a "${NAME}" init_boot.img
 
+      - name: vendor_boot
+        if: ${{ env.GET == 'vendor_boot' }}
+        run: |
+          if [ ! -f "vendor_boot.img" ]; then
+            ./tools/payload_dumper.py --out . --images vendor_boot payload.bin
+          fi
+          7z a "${NAME}" vendor_boot.img
+
       - name: settings_apk
         if: ${{ env.GET == 'settings_apk' }}
         run: |
@@ -90,7 +98,4 @@ jobs:
 
       - name: upload
         run: |
-          # if ! gh release view "$GET"; then
-            # gh release create "$GET" --title "$GET"
-          # fi
           gh release upload "$GET" "${NAME}" --clobber
