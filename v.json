@@ -47,4 +47,11 @@
   "vendor_boot": "false",
   "Settings_apk": "false"
 }
+,
+"marble-ota_full-OS2.0.5.0.VMRCNXM-user-15.0-360119838b.zip?t=1744402038&s=3d78b965ca3a36ed20a457680e4a2756": {
+  "boot": "true",
+  "init_boot": "false",
+  "vendor_boot": "true",
+  "Settings_apk": "true"
+}
 }
