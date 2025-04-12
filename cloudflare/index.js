@@ -43,16 +43,17 @@ export default {
 
     const fileName = url.split("/").pop();
 
-    // Check v.json for existing Telegram links
     try {
       const vJsonResponse = await fetch(
         "https://raw.githubusercontent.com/offici5l/Firmware-Content-Extractor/main/v.json"
       );
       if (vJsonResponse.ok) {
         const data = await vJsonResponse.json();
+        let foundKey = null;
         for (const key in data) {
           if (key.startsWith(fileName)) {
-            const values = data[key];
+            foundKey = key;
+            const values = data[foundKey];
             let telegramLinks = [];
             for (const [k, v] of Object.entries(values)) {
               if (v === "true") {
@@ -70,7 +71,7 @@ export default {
         }
       }
     } catch (error) {
-      // 
+      //
     }
 
     const headers = {
@@ -95,42 +96,33 @@ export default {
         body: JSON.stringify(data),
       });
 
-      if (!githubResponse.ok) {
+      if (githubResponse.ok) {
+        while (true) {
+          const trackResponse = await fetch(TRACK_URL, { method: "GET", headers });
+          if (trackResponse.ok) {
+            const workflowRuns = await trackResponse.json();
+            for (const jobUrl of workflowRuns.workflow_runs.map(
+              (run) => run.url + "/jobs"
+            )) {
+              const jobResponse = await fetch(jobUrl, { method: "GET", headers });
+              if (jobResponse.ok) {
+                const jobData = await jobResponse.json();
+                const job = jobData.jobs.find((job) => job.name === track);
+                if (job) {
+                  return new Response(`\n\nTrack progress: ${job.html_url}\n`, {
+                    status: 200,
+                  });
+                }
+              }
+            }
+          }
+        }
+      } else {
         const githubResponseText = await githubResponse.text();
         return new Response(`GitHub Response Error: ${githubResponseText}`, {
           status: 500,
         });
       }
-
-      const maxAttempts = 30; // Adjust as needed
-      let attempts = 0;
-      while (attempts < maxAttempts) {
-        const trackResponse = await fetch(TRACK_URL, { method: "GET", headers });
-        if (trackResponse.ok) {
-          const workflowRuns = await trackResponse.json();
-          for (const jobUrl of workflowRuns.workflow_runs.map(
-            (run) => run.url + "/jobs"
-          )) {
-            const jobResponse = await fetch(jobUrl, { method: "GET", headers });
-            if (jobResponse.ok) {
-              const jobData = await jobResponse.json();
-              const job = jobData.jobs.find((job) => job.name === track);
-              if (job) {
-                return new Response(
-                  `\n\nTrack progress: ${job.html_url}\n`,
-                  { status: 200 }
-                );
-              }
-            }
-          }
-        }
-        attempts++;
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-      }
-      return new Response(
-        "\nWorkflow tracking timed out. Please check the GitHub Actions page manually.\n",
-        { status: 504 }
-      );
     } catch (error) {
       return new Response(`Error: ${error.message}`, { status: 500 });
     }
