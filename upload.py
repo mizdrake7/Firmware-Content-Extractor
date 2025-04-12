@@ -7,7 +7,7 @@ api_id = os.getenv('API_ID')
 api_hash = os.getenv('API_HASH')
 phone = os.getenv('PHONE')
 channel_id = sys.argv[1]
-file_path = os.getenv('FILE_PATH')
+file_path = sys.argv[2]
 
 client = TelegramClient('session_name', api_id, api_hash)
 
