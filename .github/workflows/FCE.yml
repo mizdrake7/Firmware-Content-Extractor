@@ -3,8 +3,6 @@ name: FCE
 on:
   workflow_dispatch:
     inputs:
-      get:
-        required: true
       url:
         required: true
       track:
@@ -12,7 +10,6 @@ on:
 
 
 env:
-  GET: ${{ github.event.inputs.get }}
   URL: ${{ github.event.inputs.url }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -22,18 +19,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
-      - name: validate
-        run: |
-          [[ "$GET" == "settings_apk" || "$GET" == "boot_img" || "$GET" == "init_boot_img" || "$GET" == "vendor_boot" ]] || { echo "Only 'settings_apk', 'boot_img', 'init_boot_img', or 'vendor_boot' are allowed."; exit 1; }
-          curl --head --fail "$URL" && [[ "$URL" == *.zip ]] || { echo "Invalid or inaccessible URL."; exit 1; }
-          NAME=${GET}_$(basename "$URL")
-          status_code=$(curl -o /dev/null -s -w "%{http_code}" -L "https://github.com/${GITHUB_REPOSITORY}/releases/download/${GET}/${NAME}")
-          if [[ "$status_code" == 200 || "$status_code" == 302 ]]; then
-            echo "${NAME} existing"
-            exit 1
-          fi
-          echo "NAME=$NAME" >> $GITHUB_ENV
         
       - uses: actions/checkout@v4
 
@@ -66,37 +51,49 @@ jobs:
           7z x exrom.zip -o./
           rm exrom.zip
 
-      - name: boot_img
-        if: ${{ env.GET == 'boot_img' }}
+      - name: EC
         run: |
+          
           if [ ! -f "boot.img" ]; then
             ./tools/payload_dumper.py --out . --images boot payload.bin
           fi
-          7z a "${NAME}" boot.img
+          7z a "boot_img_$(basename "$URL")" boot.img
 
-      - name: init_boot_img
-        if: ${{ env.GET == 'init_boot_img' }}
-        run: |
           if [ ! -f "init_boot.img" ]; then
             ./tools/payload_dumper.py --out . --images init_boot payload.bin
           fi
-          7z a "${NAME}" init_boot.img
+          7z a "init_boot_$(basename "$URL")" init_boot.img
 
-      - name: vendor_boot
-        if: ${{ env.GET == 'vendor_boot' }}
-        run: |
+
           if [ ! -f "vendor_boot.img" ]; then
             ./tools/payload_dumper.py --out . --images vendor_boot payload.bin
           fi
-          7z a "${NAME}" vendor_boot.img
+          7z a "vendor_boot_$(basename "$URL")" vendor_boot.img
+ 
 
-      - name: settings_apk
-        if: ${{ env.GET == 'settings_apk' }}
-        run: |
-          ./tools/payload_dumper.py --out . --images system_ext payload.bin
+          if [ ! -f "system_ext.img" ]; then
+            ./tools/payload_dumper.py --out . --images system_ext payload.bin
+          fi
           sudo mkdir -p /mnt/priv-app/Settings && sudo chmod -R 777 /mnt && 7z x system_ext.img -o/mnt -y && sudo cp /mnt/priv-app/Settings/Settings.apk . && echo "method 1 used" || (./tools/extract.erofs -i system_ext.img -x -o . && cp system_ext/priv-app/Settings/Settings.apk . && echo "method 2 used" || (echo "both methods failed" && exit 1))
-          7z a "${NAME}" Settings.apk
 
+          7z a "Settings_apk_$(basename "$URL")" Settings.apk
+          
       - name: upload
         run: |
-          gh release upload "$GET" "${NAME}" --clobber
+          gh release upload "boot_img" "boot_img_$(basename "$URL")" --clobber
+
+          gh release upload "init_boot" "init_boot_$(basename "$URL")" --clobber
+
+          gh release upload "vendor_boot" "vendor_boot_$(basename "$URL")" --clobber
+
+          gh release upload "Settings_apk" "Settings_apk_$(basename "$URL")" --clobber
+
+
+      - name: update v.text
+        run: |
+          echo "$(basename "$URL")" >> v.text
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add v.text
+          git commit -m "update v.text with $(basename "$URL")"
+          git push
