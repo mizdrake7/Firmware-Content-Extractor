@@ -44,6 +44,7 @@ export default {
     const fileName = url.split("/").pop();
 
     try {
+      const Name = url.split("/").pop().split(".zip")[0];
       const vJsonResponse = await fetch(
         "https://raw.githubusercontent.com/offici5l/Firmware-Content-Extractor/main/v.json"
       );
@@ -51,7 +52,7 @@ export default {
         const data = await vJsonResponse.json();
         let foundKey = null;
         for (const key in data) {
-          if (key.startsWith(fileName)) {
+          if (key.startsWith(Name)) {
             foundKey = key;
             const values = data[foundKey];
             let telegramLinks = [];
@@ -63,7 +64,7 @@ export default {
             if (telegramLinks.length > 0) {
               return new Response(`\n${telegramLinks.join("\n")}\n`, { status: 200 });
             } else {
-              return new Response(`\nNo Telegram links found for ${fileName}\n`, { status: 200 });
+              return new Response(`\nNo Telegram links found for ${Name}\n`, { status: 200 });
             }
           }
         }
