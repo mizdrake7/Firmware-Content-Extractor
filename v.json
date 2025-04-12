@@ -12,4 +12,11 @@
   "vendor_boot_img_zip": "false",
   "Xiaomi_Settings_apk": "false"
 }
+,
+"miui_RUBY_V13.0.6.0.SMOCNXM_fe5fcce44f_12.0": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "false",
+  "vendor_boot_img_zip": "false",
+  "Xiaomi_Settings_apk": "false"
+}
 }
