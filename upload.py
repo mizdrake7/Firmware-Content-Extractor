@@ -1,6 +1,7 @@
 from telethon.sync import TelegramClient
 from telethon.tl.functions.messages import SendMediaRequest
 from telethon.tl.types import InputMediaUploadedDocument
+from telethon.tl.types import DocumentAttributeFilename
 import os, sys
 
 api_id = os.getenv('API_ID')
@@ -19,6 +20,7 @@ with client:
         media=InputMediaUploadedDocument(
             file=file,
             mime_type='application/zip',
-            attributes=[DocumentAttributeFilename(file_name=os.path.basename(file_path))]
-        ), message=''
+            attributes=[DocumentAttributeFilename(os.path.basename(file_path))]
+        ),
+        message=''
     ))
