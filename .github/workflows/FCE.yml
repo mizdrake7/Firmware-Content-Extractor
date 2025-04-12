@@ -58,6 +58,11 @@ jobs:
         run: |
           echo "${{ secrets.SESSION_FILE }}" | base64 -d > session_name.session
 
+          boot_img="false"
+          init_boot="false"
+          vendor_boot="false"
+          settings_apk="false"
+
           if [ -f "payload.bin" ]; then
             echo "payload.bin found, extracting images..."
             for img in boot init_boot vendor_boot system_ext; do
@@ -77,21 +82,6 @@ jobs:
             fi
           done
 
-          if [ -f "system_ext.img" ]; then
-            sudo mkdir -p /mnt/priv-app/Settings && sudo chmod -R 777 /mnt
-            7z x system_ext.img -o/mnt -y && sudo cp /mnt/priv-app/Settings/Settings.apk . && echo "method 1 used" || \
-            (./tools/extract.erofs -i system_ext.img -x -o . && cp system_ext/priv-app/Settings/Settings.apk . && echo "method 2 used" || (echo "both methods failed" && exit 1))
-            7z a "Settings_apk_${rom_name}.zip" Settings.apk
-          else
-            echo "system_ext.img not found, skipping Settings.apk extraction"
-          fi
-
-          boot_img="false"
-          init_boot="false"
-          vendor_boot="false"
-          settings_apk="false"
-
-
 
           if [ -f "boot_img_${rom_name}.zip" ]; then
             python upload.py @boot_img_zip "boot_img_${rom_name}.zip"
@@ -107,6 +97,16 @@ jobs:
             python upload.py @vendor_boot_img_zip "vendor_boot_img_${rom_name}.zip"
             vendor_boot="true"
           fi
+
+          if [ -f "system_ext.img" ]; then
+            sudo mkdir -p /mnt/priv-app/Settings && sudo chmod -R 777 /mnt
+            7z x system_ext.img -o/mnt -y && sudo cp /mnt/priv-app/Settings/Settings.apk . && echo "method 1 used" || \
+            (./tools/extract.erofs -i system_ext.img -x -o . && cp system_ext/priv-app/Settings/Settings.apk . && echo "method 2 used" || (echo "both methods failed" && exit 1))
+            7z a "Settings_apk_${rom_name}.zip" Settings.apk
+          else
+            echo "system_ext.img not found, skipping Settings.apk extraction"
+          fi
+
 
           if [ -f "Settings_apk_${rom_name}.zip" ]; then
             python upload.py @app_settings_zip "Settings_apk_${rom_name}.zip"
