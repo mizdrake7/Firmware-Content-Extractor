@@ -62,7 +62,7 @@ export default {
               }
             }
             if (telegramLinks.length > 0) {
-              return new Response(`\n${telegramLinks.join("\n")}\n`, { status: 200 });
+              return new Response(`\n${telegramLinks.join("\n")}\n\n`, { status: 200 });
             } else {
               return new Response(`\nNo Telegram links found for ${Name}\n`, { status: 200 });
             }
@@ -108,7 +108,7 @@ export default {
                 const jobData = await jobResponse.json();
                 const job = jobData.jobs.find((job) => job.name === track);
                 if (job) {
-                  return new Response(`\n\nTrack progress: ${job.html_url}\n`, {
+                  return new Response(`\n\nTrack progress: ${job.html_url}\n>(End of process)\n\n`, {
                     status: 200,
                   });
                 }
