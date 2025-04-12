@@ -113,11 +113,12 @@ jobs:
 
           FILE="v.json"
           NEW_ENTRY='"'$rom_name'": {
-            "boot": "'$boot_img'",
-            "init_boot": "'$init_boot'",
-            "vendor_boot": "'$vendor_boot'",
-            "Settings_apk": "'$settings_apk'"
+            "boot_img_zip": "'$boot_img'",
+            "init_boot_img_zip": "'$init_boot'",
+            "vendor_boot_img_zip": "'$vendor_boot'",
+            "Xiaomi_Settings_apk": "'$settings_apk'"
           }'
+
 
           if [ ! -f "$FILE" ]; then
             echo -e "{\n$NEW_ENTRY\n}" > "$FILE"
@@ -131,3 +132,5 @@ jobs:
           git add v.json
           git commit -m "update v.json with $rom_name"
           git push
+
+
