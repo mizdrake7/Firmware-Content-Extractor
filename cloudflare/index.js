@@ -49,9 +49,11 @@ export default {
       );
       if (vJsonResponse.ok) {
         const data = await vJsonResponse.json();
+        let foundKey = null;
         for (const key in data) {
           if (key.startsWith(fileName)) {
-            const values = data[key];
+            foundKey = key;
+            const values = data[foundKey];
             let telegramLinks = [];
             for (const [k, v] of Object.entries(values)) {
               if (v === "true") {
@@ -61,15 +63,13 @@ export default {
             if (telegramLinks.length > 0) {
               return new Response(`\n${telegramLinks.join("\n")}\n`, { status: 200 });
             } else {
-              return new Response(`\nNo Telegram links found for ${fileName}\n`, {
-                status: 200,
-              });
+              return new Response(`\nNo Telegram links found for ${fileName}\n`, { status: 200 });
             }
           }
         }
       }
     } catch (error) {
-      //
+      return new Response(`Error: ${error}`, { status: 500 });
     }
 
     const headers = {
