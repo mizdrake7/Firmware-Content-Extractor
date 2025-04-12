@@ -1,27 +1,5 @@
-const KV = MY_KV_NAMESPACE;
-
 export default {
   async fetch(req, env) {
-    const clientIP = req.headers.get('CF-Connecting-IP') || 'unknown';
-    const attemptsKey = `attempts_${clientIP}`;
-    const banKey = `ban_${clientIP}`;
-    const banData = await KV.get(banKey, { type: 'json' });
-    if (banData && banData.expires > Date.now()) {
-      return new Response('You are banned for 24 hours due to repeated attempts.', { status: 403 });
-    }
-    let attempts = await KV.get(attemptsKey, { type: 'json' }) || { count: 0, lastAttempt: Date.now() };
-    if (Date.now() - attempts.lastAttempt > 3600 * 1000) {
-      attempts = { count: 0, lastAttempt: Date.now() };
-    }
-    attempts.count += 1;
-    attempts.lastAttempt = Date.now();
-    await KV.put(attemptsKey, JSON.stringify(attempts), { expirationTtl: 3600 });
-    if (attempts.count > 3) {
-      const banExpiration = Date.now() + 24 * 3600 * 1000;
-      await KV.put(banKey, JSON.stringify({ expires: banExpiration }), { expirationTtl: 24 * 3600 });
-      return new Response('You are banned for 24 hours due to repeated attempts.', { status: 403 });
-    }
-
     const urlParams = new URLSearchParams(req.url.split('?')[1]);
     const get = urlParams.get('get');
     let url = urlParams.get('url');
@@ -56,11 +34,13 @@ export default {
       return new Response("\nMissing 'url' parameter!\n", { status: 400 });
     }
 
+ 
     if (url && url.includes(".zip")) {
       url = url.split(".zip")[0] + ".zip";
     } else {
       return new Response("\nOnly .zip URLs are supported.\n", { status: 400 });
     }
+
 
     const response = await fetch(url, { method: 'HEAD' });
     if (!response.ok) {
