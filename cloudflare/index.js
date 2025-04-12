@@ -49,11 +49,9 @@ export default {
       );
       if (vJsonResponse.ok) {
         const data = await vJsonResponse.json();
-        let foundKey = null;
         for (const key in data) {
           if (key.startsWith(fileName)) {
-            foundKey = key;
-            const values = data[foundKey];
+            const values = data[key];
             let telegramLinks = [];
             for (const [k, v] of Object.entries(values)) {
               if (v === "true") {
