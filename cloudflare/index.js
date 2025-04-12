@@ -1,5 +1,8 @@
 export default {
   async fetch(req, env) {
+
+    return new Response(`service is currently suspended.`, { status: 500 });
+
     const urlParams = new URLSearchParams(req.url.split('?')[1]);
     const get = urlParams.get('get');
     let url = urlParams.get('url');
@@ -96,9 +99,8 @@ export default {
           }
         }
       } else {
-        const githubResponseText = await githubResponse.text();
-        return new Response(`service is currently suspended.`, { status: 500 });
-        // return new Response(`GitHub Response Error: ${githubResponseText}`, { status: 500 });
+        const githubResponseText = await githubResponse.text();        
+        return new Response(`GitHub Response Error: ${githubResponseText}`, { status: 500 });
       }
     } catch (error) {
       return new Response(`Error: ${error.message}`, { status: 500 });
