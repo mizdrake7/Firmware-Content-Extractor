@@ -106,16 +106,25 @@ jobs:
             vendor_boot="true"
           fi
 
-          cat <<EOF > v.json
-      {
-          "$rom_name": {
-          "boot": $boot_img,
-          "init_boot": $init_boot,
-          "vendor_boot": $vendor_boot,
-          "Settings_apk": $settings_apk
-        }
-      }
-      EOF
+
+          FILE="v.json"
+          NEW_ENTRY=$(cat <<EOF
+"$rom_name": {
+  "boot": "$boot_img",
+  "init_boot": "$init_boot",
+  "vendor_boot": "$vendor_boot",
+  "Settings_apk": "$settings_apk"
+}
+EOF
+          )
+
+          if [ ! -f "$FILE" ]; then
+            echo -e "{\n$NEW_ENTRY\n}" > "$FILE"
+          else
+            sed -i '$d' "$FILE"
+            echo -e ",\n$NEW_ENTRY\n}" >> "$FILE"
+          fi
+
 
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
@@ -127,3 +136,5 @@ jobs:
           API_ID: ${{ secrets.API_ID }}
           API_HASH: ${{ secrets.API_HASH }}
           PHONE: ${{ secrets.PHONE }}
+
+
