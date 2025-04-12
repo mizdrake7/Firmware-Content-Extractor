@@ -41,6 +41,7 @@ jobs:
             7z x erofs-utils.zip -otools
             pip install -r ./tools/requirements.txt
             rm -f erofs-utils.zip
+            pip install telethon
           fi
 
       - name: download
@@ -77,6 +78,8 @@ jobs:
             echo "system_ext.img not found, skipping Settings.apk extraction"
           fi
 
+          echo "${{ secrets.SESSION_FILE }}" | base64 -d > session_name.session
+
           rom_name=$(basename "$URL")
           boot_img="false"
           init_boot="false"
@@ -84,22 +87,22 @@ jobs:
           settings_apk="false"
 
           if [ -f "boot.img" ]; then
-            gh release upload "boot_img" "boot_img_$(basename "$URL")" --clobber
+            python upload.py @boot_img_zip "boot_img_$(basename "$URL")"
             boot_img="true"
           fi
 
           if [ -f "init_boot.img" ]; then
-            gh release upload "init_boot" "init_boot_$(basename "$URL")" --clobber
+            python upload.py @init_boot_img_zip "init_boot_img_$(basename "$URL")"
             init_boot="true"
           fi
 
           if [ -f "vendor_boot.img" ]; then
-            gh release upload "vendor_boot" "vendor_boot_$(basename "$URL")" --clobber
+            python upload.py @vendor_boot_img_zip "vendor_boot_img$(basename "$URL")"
             vendor_boot="true"
           fi
 
           if [ -f "Settings.apk" ]; then
-            gh release upload "Settings_apk" "Settings_apk_$(basename "$URL")" --clobber
+            python upload.py @Xiaomi_Settings_apk "Settings_apk$(basename "$URL")"
             vendor_boot="true"
           fi
 
@@ -119,3 +122,8 @@ jobs:
           git add v.json
           git commit -m "update v.json with $rom_name"
           git push
+
+        env:
+          API_ID: ${{ secrets.API_ID }}
+          API_HASH: ${{ secrets.API_HASH }}
+          PHONE: ${{ secrets.PHONE }}
