@@ -1,14 +1,15 @@
 name: FCE
 
-on:
-  workflow_dispatch:
-    inputs:
-      get:
-        required: true
-      url:
-        required: true
-      track:
-        required: false
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       get:
+#         required: true
+#       url:
+#         required: true
+#       track:
+#         required: false
+
 
 env:
   GET: ${{ github.event.inputs.get }}
