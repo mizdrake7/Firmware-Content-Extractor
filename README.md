@@ -7,7 +7,7 @@
 `boot.img` in: t.me/boot_img_zip
 `init_boot.img` in: t.me/init_boot_img_zip
 `vendor_boot.img` in: t.me/vendor_boot_img_zip
-`settings.apk` in: t.me/Xiaomi_Settings_apk
+`settings.apk` in: t.me/app_settings_zip
 ___
 
 #### **Usage:**
