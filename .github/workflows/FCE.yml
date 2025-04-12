@@ -113,10 +113,10 @@ jobs:
 
           FILE="v.json"
           NEW_ENTRY='"'$rom_name'": {
-            "@boot_img_zip": "'$boot_img'",
-            "@init_boot_img_zip": "'$init_boot'",
-            "@vendor_boot_img_zip": "'$vendor_boot'",
-            "@Xiaomi_Settings_apk": "'$settings_apk'"
+            "boot_img_zip": "'$boot_img'",
+            "init_boot_img_zip": "'$init_boot'",
+            "vendor_boot_img_zip": "'$vendor_boot'",
+            "Xiaomi_Settings_apk": "'$settings_apk'"
           }'
 
 
