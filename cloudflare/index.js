@@ -4,16 +4,8 @@ export default {
     return new Response(`service is currently suspended.`, { status: 500 });
 
     const urlParams = new URLSearchParams(req.url.split('?')[1]);
-    const get = urlParams.get('get');
     let url = urlParams.get('url');
 
-    if (!get || !url) {
-      return new Response("\nMissing parameters!\n\nUsage: \ncurl fce.offici5l.workers.dev?get=<boot_img|settings_apk|init_boot_img>&url=<url>\n\nExample:\n curl fce.offici5l.workers.dev?get=boot_img&url=https://example.com/file.zip\n\n", { status: 400 });
-    }
-
-    if (get !== "boot_img" && get !== "settings_apk" && get !== "init_boot_img") {
-      return new Response("\nOnly 'boot_img', 'settings_apk', and 'init_boot_img' are allowed for 'get' parameter.\n", { status: 400 });
-    }
 
     const domains = [
         "ultimateota.d.miui.com", 
@@ -26,7 +18,12 @@ export default {
         "airtel.bigota.d.miui.com"
     ];
 
-    if (url) {
+    if (url) { 
+      if (url && url.includes(".zip")) {
+        url = url.split(".zip")[0] + ".zip";
+      } else {
+        return new Response("\nOnly .zip URLs are supported.\n", { status: 400 });
+      }
       for (const domain of domains) {
         if (url.includes(domain)) {
           url = url.replace(domain, "bkt-sgp-miui-ota-update-alisgp.oss-ap-southeast-1.aliyuncs.com");
@@ -34,16 +31,8 @@ export default {
         }
       }
     } else {
-      return new Response("\nMissing 'url' parameter!\n", { status: 400 });
+      return new Response("\nMissing parameters!\n\nUsage: \ncurl fce.offici5l.workers.dev?url=<url>\n\nExample:\n curl fce.offici5l.workers.dev?url=https://example.com/file.zip\n\n", { status: 400 });
     }
-
- 
-    if (url && url.includes(".zip")) {
-      url = url.split(".zip")[0] + ".zip";
-    } else {
-      return new Response("\nOnly .zip URLs are supported.\n", { status: 400 });
-    }
-
 
     const response = await fetch(url, { method: 'HEAD' });
     if (!response.ok) {
