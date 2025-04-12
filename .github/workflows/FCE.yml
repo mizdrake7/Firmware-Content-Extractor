@@ -65,7 +65,7 @@ jobs:
             echo "payload.bin not found, using existing images..."
           fi
 
-          rom_name=$(basename "$URL")
+          rom_name=$(basename "$URL" .zip)
           for img in boot init_boot vendor_boot; do
             if [ -f "$img.img" ]; then
               7z a "${img}_img_${rom_name}.zip" "$img.img"
