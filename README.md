@@ -12,7 +12,7 @@ ___
 
 #### **Usage:**
 
-**Method 1. Using `curl`:**
+**Method 1. Using terminal ex: with `curl`:**
 
 ```bash
 curl "fce.offici5l.workers.dev?url=rom.zip"
