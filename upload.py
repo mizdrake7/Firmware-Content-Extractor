@@ -22,5 +22,5 @@ with client:
             mime_type='application/zip',
             attributes=[DocumentAttributeFilename(os.path.basename(file_path))]
         ),
-        message=''
+        message=file_path
     ))
