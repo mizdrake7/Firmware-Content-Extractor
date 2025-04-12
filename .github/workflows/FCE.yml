@@ -81,14 +81,15 @@ jobs:
         run: |
           if [ -f "boot.img" ]; then
             gh release upload "boot_img" "boot_img_$(basename "$URL")" --clobber
+            boot_img = "true"
           else
-            echo "boot.img not found, skipping upload"
+            boot_img = "false"
           fi
 
           if [ -f "init_boot.img" ]; then
             gh release upload "init_boot" "init_boot_$(basename "$URL")" --clobber
           else
-            echo "init_boot.img not found, skipping upload"
+            init_boot = "false"
           fi
 
           if [ -f "vendor_boot.img" ]; then
