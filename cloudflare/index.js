@@ -97,10 +97,12 @@ export default {
         }
       } else {
         const githubResponseText = await githubResponse.text();
-        return new Response(`GitHub Response Error: ${githubResponseText}`, { status: 500 });
+        return new Response(`service is currently suspended.`, { status: 500 });
+        #return new Response(`GitHub Response Error: ${githubResponseText}`, { status: 500 });
       }
     } catch (error) {
       return new Response(`Error: ${error.message}`, { status: 500 });
     }
   }
 };
+
