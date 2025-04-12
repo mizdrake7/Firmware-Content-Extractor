@@ -41,7 +41,7 @@ jobs:
             7z x erofs-utils.zip -otools  
             pip install -r ./tools/requirements.txt  
             rm -f erofs-utils.zip  
-            pip install telethon  
+            pip install telethon==3.4.8  
           fi  
 
       - name: download  
@@ -60,7 +60,10 @@ jobs:
 
           if [ -f "payload.bin" ]; then
             echo "payload.bin found, extracting images..."
-            ./tools/payload_dumper.py --out . --images boot init_boot vendor_boot system_ext payload.bin
+            for img in boot init_boot vendor_boot system_ext; do
+              echo "Attempting to extract $img..."
+              ./tools/payload_dumper.py --out . --images $img payload.bin || echo "$img not found in payload.bin, skipping..."
+            done
           else
             echo "payload.bin not found, using existing images..."
           fi
