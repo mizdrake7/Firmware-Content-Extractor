@@ -65,9 +65,10 @@ jobs:
             echo "payload.bin not found, using existing images..."
           fi
 
+          rom_name=$(basename "$URL")
           for img in boot init_boot vendor_boot; do
             if [ -f "$img.img" ]; then
-              7z a "${img}_img_$(basename "$URL")" "$img.img"
+              7z a "${img}_img_${rom_name}.zip" "$img.img"
             else
               echo "$img.img not found, skipping..."
             fi
@@ -77,34 +78,33 @@ jobs:
             sudo mkdir -p /mnt/priv-app/Settings && sudo chmod -R 777 /mnt
             7z x system_ext.img -o/mnt -y && sudo cp /mnt/priv-app/Settings/Settings.apk . && echo "method 1 used" || \
             (./tools/extract.erofs -i system_ext.img -x -o . && cp system_ext/priv-app/Settings/Settings.apk . && echo "method 2 used" || (echo "both methods failed" && exit 1))
-            7z a "Settings_apk_$(basename "$URL")" Settings.apk
+            7z a "Settings_apk_${rom_name}.zip" Settings.apk
           else
             echo "system_ext.img not found, skipping Settings.apk extraction"
           fi
 
-          rom_name=$(basename "$URL")
           boot_img="false"
           init_boot="false"
           vendor_boot="false"
           settings_apk="false"
 
-          if [ -f "boot_img_$rom_name" ]; then
-            python upload.py @boot_img_zip "boot_img_$rom_name"
+          if [ -f "boot_img_${rom_name}.zip" ]; then
+            python upload.py @boot_img_zip "boot_img_${rom_name}.zip"
             boot_img="true"
           fi
 
-          if [ -f "init_boot_img_$rom_name" ]; then
-            python upload.py @init_boot_img_zip "init_boot_img_$rom_name"
+          if [ -f "init_boot_img_${rom_name}.zip" ]; then
+            python upload.py @init_boot_img_zip "init_boot_img_${rom_name}.zip"
             init_boot="true"
           fi
 
-          if [ -f "vendor_boot_img_$rom_name" ]; then
-            python upload.py @vendor_boot_img_zip "vendor_boot_img_$rom_name"
+          if [ -f "vendor_boot_img_${rom_name}.zip" ]; then
+            python upload.py @vendor_boot_img_zip "vendor_boot_img_${rom_name}.zip"
             vendor_boot="true"
           fi
 
-          if [ -f "Settings_apk_$rom_name" ]; then
-            python upload.py @Xiaomi_Settings_apk "Settings_apk_$rom_name"
+          if [ -f "Settings_apk_${rom_name}.zip" ]; then
+            python upload.py @Xiaomi_Settings_apk "Settings_apk_${rom_name}.zip"
             settings_apk="true"
           fi
 
