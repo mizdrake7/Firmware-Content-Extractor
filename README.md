@@ -12,16 +12,14 @@ ___
 
 #### **Usage:**
 
-- **url**: The URL to the `.zip` firmware file.
-
 **Method 1. Using `curl`:**
 
 ```bash
-curl "fce.offici5l.workers.dev?url=<url>"
+curl "fce.offici5l.workers.dev?url=rom.zip"
 ```
 
 **Method 2. Using a `browser`:**
 
 Open the following link in your browser:
 
-`fce.offici5l.workers.dev?url=<url>`
+`fce.offici5l.workers.dev?url=rom.zip`
