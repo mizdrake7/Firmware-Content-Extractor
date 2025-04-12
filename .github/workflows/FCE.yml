@@ -77,37 +77,45 @@ jobs:
             echo "system_ext.img not found, skipping Settings.apk extraction"
           fi
 
+          rom_name=$(basename "$URL")
+          boot_img="false"
+          init_boot="false"
+          vendor_boot="false"
+          settings_apk="false"
+
           if [ -f "boot.img" ]; then
             gh release upload "boot_img" "boot_img_$(basename "$URL")" --clobber
             boot_img="true"
-          else
-            boot_img="false"
           fi
 
           if [ -f "init_boot.img" ]; then
             gh release upload "init_boot" "init_boot_$(basename "$URL")" --clobber
             init_boot="true"
-          else
-            init_boot="false"
           fi
 
           if [ -f "vendor_boot.img" ]; then
             gh release upload "vendor_boot" "vendor_boot_$(basename "$URL")" --clobber
             vendor_boot="true"
-          else
-            vendor_boot="false"
           fi
 
           if [ -f "Settings.apk" ]; then
             gh release upload "Settings_apk" "Settings_apk_$(basename "$URL")" --clobber
             vendor_boot="true"
-          else
-            vendor_boot="false"
           fi
 
-          echo "$(basename "$URL")" >> v.text
+          cat <<EOF > v.json
+      {
+          "$rom_name": {
+          "boot": $boot_img,
+          "init_boot": $init_boot,
+          "vendor_boot": $vendor_boot,
+          "Settings_apk": $settings_apk
+        }
+      }
+      EOF
+
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add v.text
-          git commit -m "update v.text with $(basename "$URL")"
+          git add v.json
+          git commit -m "update v.json with $rom_name"
           git push
