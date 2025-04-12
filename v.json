@@ -40,4 +40,11 @@
   "vendor_boot": "false",
   "Settings_apk": "false"
 }
+,
+"miui_TUCANAIDGlobal_V12.5.1.0.RFDIDXM_3097136ba6_11.0": {
+  "boot": "true",
+  "init_boot": "false",
+  "vendor_boot": "false",
+  "Settings_apk": "false"
+}
 }
