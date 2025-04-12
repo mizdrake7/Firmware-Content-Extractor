@@ -1,7 +1,7 @@
 export default {
   async fetch(req, env) {
 
-    return new Response(`service is currently suspended.`, { status: 500 });
+    
 
     const urlParams = new URLSearchParams(req.url.split('?')[1]);
     let url = urlParams.get('url');
@@ -40,7 +40,12 @@ export default {
     }
 
     const fileName = url.split('/').pop();
+
+    return new Response(`\nfileName: ${fileName}\n`, { status: 200 });
+
     const combinedBasename = `${get}_${fileName}`;
+
+
     const finalUrl = `https://github.com/offici5l/Firmware-Content-Extractor/releases/download/${get}/${combinedBasename}`;
 
     const headers = {
