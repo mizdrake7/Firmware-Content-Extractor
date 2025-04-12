@@ -55,7 +55,7 @@ jobs:
           API_ID: ${{ secrets.API_ID }}  
           API_HASH: ${{ secrets.API_HASH }}  
           PHONE: ${{ secrets.PHONE }}
-        run: |  
+        run: |
           echo "${{ secrets.SESSION_FILE }}" | base64 -d > session_name.session  
 
           if [ -f "payload.bin" ]; then  
@@ -74,9 +74,9 @@ jobs:
           done  
 
           if [ -f "system_ext.img" ]; then  
-            sudo mkdir -p /mnt/priv-app/Settings && sudo chmod -R 777 /mnt && \  
-            7z x system_ext.img -o/mnt -y && \  
-            sudo cp /mnt/priv-app/Settings/Settings.apk . && echo "method 1 used" || \  
+            sudo mkdir -p /mnt/priv-app/Settings && sudo chmod -R 777 /mnt && \
+            7z x system_ext.img -o/mnt -y && \
+            sudo cp /mnt/priv-app/Settings/Settings.apk . && echo "method 1 used" || \
             (./tools/extract.erofs -i system_ext.img -x -o . && cp system_ext/priv-app/Settings/Settings.apk . && echo "method 2 used" || (echo "both methods failed" && exit 1))  
             7z a "Settings_apk_$(basename "$URL")" Settings.apk  
           else  
@@ -99,8 +99,8 @@ jobs:
             init_boot="true"  
           fi  
 
-          if [ -f "vendor_boot_img$rom_name" ]; then  
-            python upload.py @vendor_boot_img_zip "vendor_boot_img$rom_name"  
+          if [ -f "vendor_boot_img_$rom_name" ]; then  
+            python upload.py @vendor_boot_img_zip "vendor_boot_img_$rom_name"  
             vendor_boot="true"  
           fi  
 
