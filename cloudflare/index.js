@@ -31,7 +31,7 @@ export default {
         }
       }
     } else {
-      return new Response("\nMissing parameters!\n\nUsage: \ncurl fce.offici5l.workers.dev?url=<url>\n\nExample:\n curl fce.offici5l.workers.dev?url=https://example.com/file.zip\n\n", { status: 400 });
+      return new Response("\nMissing parameters!\n\nUsage: \ncurl fce.offici5l.workers.dev?url=<url>\n\nExample:\n curl fce.offici5l.workers.dev?url=https://example.com/rom.zip\n\n", { status: 400 });
     }
 
     const response = await fetch(url, { method: 'HEAD' });
