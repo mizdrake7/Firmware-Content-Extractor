@@ -19,6 +19,6 @@ with client:
         media=InputMediaUploadedDocument(
             file=file,
             mime_type='application/zip',
-            attributes=[]
+            attributes=[DocumentAttributeFilename(file_name=os.path.basename(file_path))]
         ), message=''
     ))
