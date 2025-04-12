@@ -8,18 +8,16 @@ on:
       track:
         required: false
 
-
 env:
   URL: ${{ github.event.inputs.url }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   FCE:
-    name: ${{ github.event.inputs.track }} 
+    name: ${{ github.event.inputs.track }}
     runs-on: ubuntu-latest
 
     steps:
-        
       - uses: actions/checkout@v4
 
       - name: cache
@@ -53,41 +51,57 @@ jobs:
 
       - name: EC
         run: |
-          
-          if [ ! -f "boot.img" ]; then
-            ./tools/payload_dumper.py --out . --images boot payload.bin
+          if [ -f "payload.bin" ]; then
+            echo "payload.bin found, extracting images..."
+            ./tools/payload_dumper.py --out . --images boot init_boot vendor_boot system_ext payload.bin
+          else
+            echo "payload.bin not found, using existing images..."
           fi
-          7z a "boot_img_$(basename "$URL")" boot.img
 
-          if [ ! -f "init_boot.img" ]; then
-            ./tools/payload_dumper.py --out . --images init_boot payload.bin
+          for img in boot init_boot vendor_boot; do
+            if [ -f "$img.img" ]; then
+              7z a "${img}_img_$(basename "$URL")" "$img.img"
+            else
+              echo "$img.img not found, skipping..."
+            fi
+          done
+
+          if [ -f "system_ext.img" ]; then
+            sudo mkdir -p /mnt/priv-app/Settings && sudo chmod -R 777 /mnt && \
+            7z x system_ext.img -o/mnt -y && \
+            sudo cp /mnt/priv-app/Settings/Settings.apk . && echo "method 1 used" || \
+            (./tools/extract.erofs -i system_ext.img -x -o . && cp system_ext/priv-app/Settings/Settings.apk . && echo "method 2 used" || (echo "both methods failed" && exit 1))
+
+            7z a "Settings_apk_$(basename "$URL")" Settings.apk
+          else
+            echo "system_ext.img not found, skipping Settings.apk extraction"
           fi
-          7z a "init_boot_$(basename "$URL")" init_boot.img
 
-
-          if [ ! -f "vendor_boot.img" ]; then
-            ./tools/payload_dumper.py --out . --images vendor_boot payload.bin
-          fi
-          7z a "vendor_boot_$(basename "$URL")" vendor_boot.img
- 
-
-          if [ ! -f "system_ext.img" ]; then
-            ./tools/payload_dumper.py --out . --images system_ext payload.bin
-          fi
-          sudo mkdir -p /mnt/priv-app/Settings && sudo chmod -R 777 /mnt && 7z x system_ext.img -o/mnt -y && sudo cp /mnt/priv-app/Settings/Settings.apk . && echo "method 1 used" || (./tools/extract.erofs -i system_ext.img -x -o . && cp system_ext/priv-app/Settings/Settings.apk . && echo "method 2 used" || (echo "both methods failed" && exit 1))
-
-          7z a "Settings_apk_$(basename "$URL")" Settings.apk
-          
       - name: upload
         run: |
-          gh release upload "boot_img" "boot_img_$(basename "$URL")" --clobber
+          if [ -f "boot.img" ]; then
+            gh release upload "boot_img" "boot_img_$(basename "$URL")" --clobber
+          else
+            echo "boot.img not found, skipping upload"
+          fi
 
-          gh release upload "init_boot" "init_boot_$(basename "$URL")" --clobber
+          if [ -f "init_boot.img" ]; then
+            gh release upload "init_boot" "init_boot_$(basename "$URL")" --clobber
+          else
+            echo "init_boot.img not found, skipping upload"
+          fi
 
-          gh release upload "vendor_boot" "vendor_boot_$(basename "$URL")" --clobber
+          if [ -f "vendor_boot.img" ]; then
+            gh release upload "vendor_boot" "vendor_boot_$(basename "$URL")" --clobber
+          else
+            echo "vendor_boot.img not found, skipping upload"
+          fi
 
-          gh release upload "Settings_apk" "Settings_apk_$(basename "$URL")" --clobber
-
+          if [ -f "Settings.apk" ]; then
+            gh release upload "Settings_apk" "Settings_apk_$(basename "$URL")" --clobber
+          else
+            echo "Settings.apk not found, skipping upload"
+          fi
 
       - name: update v.text
         run: |
