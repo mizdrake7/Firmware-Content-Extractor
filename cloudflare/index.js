@@ -1,7 +1,7 @@
 export default {
   async fetch(req, env) {
-    const urlParams = new URLSearchParams(req.url.split('?')[1]);
-    let url = urlParams.get('url');
+    const urlParams = new URLSearchParams(req.url.split("?")[1]);
+    let url = urlParams.get("url");
 
     const domains = [
       "ultimateota.d.miui.com",
@@ -18,7 +18,7 @@ export default {
       if (url.includes(".zip")) {
         url = url.split(".zip")[0] + ".zip";
       } else {
-        return new Response("Only .zip URLs are supported.", { status: 400 });
+        return new Response("\nOnly .zip URLs are supported.\n", { status: 400 });
       }
       for (const domain of domains) {
         if (url.includes(domain)) {
@@ -31,19 +31,19 @@ export default {
       }
     } else {
       return new Response(
-        "Missing parameters!\nUsage: curl fce.offici5l.workers.dev?url=<url>\nExample: curl fce.offici5l.workers.dev?url=https://example.com/rom.zip",
+        "\nMissing parameters!\n\nUsage: \ncurl fce.offici5l.workers.dev?url=<url>\n\nExample:\n curl fce.offici5l.workers.dev?url=https://example.com/rom.zip\n\n",
         { status: 400 }
       );
     }
 
     const response = await fetch(url, { method: "HEAD" });
     if (!response.ok) {
-      return new Response("The provided URL is not accessible.", { status: 400 });
+      return new Response("\nThe provided URL is not accessible.\n", { status: 400 });
     }
 
     const fileName = url.split("/").pop();
 
-    // Check v.json
+    // Check v.json for existing Telegram links
     try {
       const vJsonResponse = await fetch(
         "https://raw.githubusercontent.com/offici5l/Firmware-Content-Extractor/main/v.json"
@@ -59,20 +59,20 @@ export default {
                 telegramLinks.push(`Available in: t.me/${k}`);
               }
             }
-            return new Response(
-              telegramLinks.length > 0
-                ? telegramLinks.join("\n")
-                : `No Telegram links found for ${fileName}`,
-              { status: 200 }
-            );
+            if (telegramLinks.length > 0) {
+              return new Response(`\n${telegramLinks.join("\n")}\n`, { status: 200 });
+            } else {
+              return new Response(`\nNo Telegram links found for ${fileName}\n`, {
+                status: 200,
+              });
+            }
           }
         }
       }
     } catch (error) {
-      // Continue to GitHub workflow if v.json check fails
+      // 
     }
 
-    // Trigger GitHub Workflow
     const headers = {
       Authorization: `token ${env.GTKK}`,
       Accept: "application/vnd.github.v3+json",
@@ -91,7 +91,7 @@ export default {
     try {
       const githubResponse = await fetch(githubDispatchUrl, {
         method: "POST",
-        headers,
+        headers: headers,
         body: JSON.stringify(data),
       });
 
@@ -102,8 +102,7 @@ export default {
         });
       }
 
-      // Poll for workflow job (with timeout)
-      const maxAttempts = 10;
+      const maxAttempts = 30; // Adjust as needed
       let attempts = 0;
       while (attempts < maxAttempts) {
         const trackResponse = await fetch(TRACK_URL, { method: "GET", headers });
@@ -117,9 +116,10 @@ export default {
               const jobData = await jobResponse.json();
               const job = jobData.jobs.find((job) => job.name === track);
               if (job) {
-                return new Response(`Track progress: ${job.html_url}`, {
-                  status: 200,
-                });
+                return new Response(
+                  `\n\nTrack progress: ${job.html_url}\n`,
+                  { status: 200 }
+                );
               }
             }
           }
@@ -128,9 +128,10 @@ export default {
         // Wait 2 seconds before retrying
         await new Promise((resolve) => setTimeout(resolve, 2000));
       }
-      return new Response("Workflow job not found after maximum attempts.", {
-        status: 504,
-      });
+      return new Response(
+        "\nWorkflow tracking timed out. Please check the GitHub Actions page manually.\n",
+        { status: 504 }
+      );
     } catch (error) {
       return new Response(`Error: ${error.message}`, { status: 500 });
     }
