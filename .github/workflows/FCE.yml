@@ -56,79 +56,75 @@ jobs:
           API_HASH: ${{ secrets.API_HASH }}  
           PHONE: ${{ secrets.PHONE }}
         run: |
-          echo "${{ secrets.SESSION_FILE }}" | base64 -d > session_name.session  
+          echo "${{ secrets.SESSION_FILE }}" | base64 -d > session_name.session
 
-          if [ -f "payload.bin" ]; then  
-            echo "payload.bin found, extracting images..."  
-            ./tools/payload_dumper.py --out . --images boot init_boot vendor_boot system_ext payload.bin  
-          else  
-            echo "payload.bin not found, using existing images..."  
-          fi  
+          if [ -f "payload.bin" ]; then
+            echo "payload.bin found, extracting images..."
+            ./tools/payload_dumper.py --out . --images boot init_boot vendor_boot system_ext payload.bin
+          else
+            echo "payload.bin not found, using existing images..."
+          fi
 
-          for img in boot init_boot vendor_boot; do  
-            if [ -f "$img.img" ]; then  
-              7z a "${img}_img_$(basename "$URL")" "$img.img"  
-            else  
-              echo "$img.img not found, skipping..."  
-            fi  
-          done  
+          for img in boot init_boot vendor_boot; do
+            if [ -f "$img.img" ]; then
+              7z a "${img}_img_$(basename "$URL")" "$img.img"
+            else
+              echo "$img.img not found, skipping..."
+            fi
+          done
 
-          if [ -f "system_ext.img" ]; then  
-            sudo mkdir -p /mnt/priv-app/Settings && sudo chmod -R 777 /mnt && \
-            7z x system_ext.img -o/mnt -y && \
-            sudo cp /mnt/priv-app/Settings/Settings.apk . && echo "method 1 used" || \
-            (./tools/extract.erofs -i system_ext.img -x -o . && cp system_ext/priv-app/Settings/Settings.apk . && echo "method 2 used" || (echo "both methods failed" && exit 1))  
-            7z a "Settings_apk_$(basename "$URL")" Settings.apk  
-          else  
-            echo "system_ext.img not found, skipping Settings.apk extraction"  
-          fi  
+          if [ -f "system_ext.img" ]; then
+            sudo mkdir -p /mnt/priv-app/Settings && sudo chmod -R 777 /mnt
+            7z x system_ext.img -o/mnt -y && sudo cp /mnt/priv-app/Settings/Settings.apk . && echo "method 1 used" || \
+            (./tools/extract.erofs -i system_ext.img -x -o . && cp system_ext/priv-app/Settings/Settings.apk . && echo "method 2 used" || (echo "both methods failed" && exit 1))
+            7z a "Settings_apk_$(basename "$URL")" Settings.apk
+          else
+            echo "system_ext.img not found, skipping Settings.apk extraction"
+          fi
 
-          rom_name=$(basename "$URL")  
-          boot_img="false"  
-          init_boot="false"  
-          vendor_boot="false"  
-          settings_apk="false"  
+          rom_name=$(basename "$URL")
+          boot_img="false"
+          init_boot="false"
+          vendor_boot="false"
+          settings_apk="false"
 
-          if [ -f "boot_img_$rom_name" ]; then  
-            python upload.py @boot_img_zip "boot_img_$rom_name"  
-            boot_img="true"  
-          fi  
+          if [ -f "boot_img_$rom_name" ]; then
+            python upload.py @boot_img_zip "boot_img_$rom_name"
+            boot_img="true"
+          fi
 
-          if [ -f "init_boot_img_$rom_name" ]; then  
-            python upload.py @init_boot_img_zip "init_boot_img_$rom_name"  
-            init_boot="true"  
-          fi  
+          if [ -f "init_boot_img_$rom_name" ]; then
+            python upload.py @init_boot_img_zip "init_boot_img_$rom_name"
+            init_boot="true"
+          fi
 
-          if [ -f "vendor_boot_img_$rom_name" ]; then  
-            python upload.py @vendor_boot_img_zip "vendor_boot_img_$rom_name"  
-            vendor_boot="true"  
-          fi  
+          if [ -f "vendor_boot_img_$rom_name" ]; then
+            python upload.py @vendor_boot_img_zip "vendor_boot_img_$rom_name"
+            vendor_boot="true"
+          fi
 
-          if [ -f "Settings_apk_$rom_name" ]; then  
-            python upload.py @Xiaomi_Settings_apk "Settings_apk_$rom_name"  
-            settings_apk="true"  
-          fi  
+          if [ -f "Settings_apk_$rom_name" ]; then
+            python upload.py @Xiaomi_Settings_apk "Settings_apk_$rom_name"
+            settings_apk="true"
+          fi
 
-          FILE="v.json"  
-          NEW_ENTRY=$(cat <<EOF
-"$rom_name": {
-  "boot": "$boot_img",
-  "init_boot": "$init_boot",
-  "vendor_boot": "$vendor_boot",
-  "Settings_apk": "$settings_apk"
-}
-EOF
-)
+          FILE="v.json"
+          NEW_ENTRY='"'$rom_name'": {
+            "boot": "'$boot_img'",
+            "init_boot": "'$init_boot'",
+            "vendor_boot": "'$vendor_boot'",
+            "Settings_apk": "'$settings_apk'"
+          }'
 
-          if [ ! -f "$FILE" ]; then  
-            echo -e "{\n$NEW_ENTRY\n}" > "$FILE"  
-          else  
-            sed -i '$d' "$FILE"  
-            echo -e ",\n$NEW_ENTRY\n}" >> "$FILE"  
-          fi  
+          if [ ! -f "$FILE" ]; then
+            echo -e "{\n$NEW_ENTRY\n}" > "$FILE"
+          else
+            sed -i '$d' "$FILE"
+            echo -e ",\n$NEW_ENTRY\n}" >> "$FILE"
+          fi
 
-          git config user.name "github-actions"  
-          git config user.email "github-actions@github.com"  
-          git add v.json  
-          git commit -m "update v.json with $rom_name"  
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add v.json
+          git commit -m "update v.json with $rom_name"
           git push
