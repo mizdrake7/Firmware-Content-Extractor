@@ -144,8 +144,31 @@ jobs:
 
       - name: End of process
         run: |
-          echo "Summary of available files:"
-          [ "$boot_img" = "true" ] && echo "boot.img Available in: t.me/boot_img_zip"
-          [ "$init_boot" = "true" ] && echo "init_boot.img Available in: t.me/init_boot_img_zip"
-          [ "$vendor_boot" = "true" ] && echo "vendor_boot.img Available in: t.me/vendor_boot_img_zip"
-          [ "$settings_apk" = "true" ] && echo "settings.apk Available in: t.me/app_settings_zip"
+
+          set -a
+          source output.env
+          set +a
+
+          if [ "$boot_img" = "true" ]; then
+            echo "boot.img Available in: t.me/boot_img_zip"
+          else
+            echo "boot.img is not available in this ROM."
+          fi
+
+          if [ "$init_boot" = "true" ]; then
+            echo "init_boot.img Available in: t.me/init_boot_img_zip"
+          else
+            echo "init_boot.img is not available in this ROM."
+          fi
+
+          if [ "$vendor_boot" = "true" ]; then
+            echo "vendor_boot.img Available in: t.me/vendor_boot_img_zip"
+          else
+            echo "vendor_boot.img is not available in this ROM."
+          fi
+
+          if [ "$settings_apk" = "true" ]; then
+            echo "settings.apk Available in: t.me/app_settings_zip"
+          else
+            echo "settings.apk is not available in this ROM."
+          fi
