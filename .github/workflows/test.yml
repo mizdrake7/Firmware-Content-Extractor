@@ -47,12 +47,9 @@ jobs:
 
       - name: EC  
         run: |
-          
           ./tools/payload_dumper.py payload.bin --out extracted
 
-     - name: List Extracted Files
+      - name: List Extracted Files
         run: |
           echo "Extracted files in 'extracted' directory:"
           ls -l extracted/
-
-     
