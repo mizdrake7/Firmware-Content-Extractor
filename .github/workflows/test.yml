@@ -47,7 +47,7 @@ jobs:
 
       - name: EC  
         run: |
-          ./tools/payload_dumper.py payload.bin --out extracted
+          ./tools/payload_dumper.py payload.bin --out extracted --images boot,recovery,vendor_boot,dsp,odm,vendor_dlkm,dtbo,imagefv,tz,uefi,bluetooth,hyp,xbl,xbl_ramdump,keymaster,aop,abl,uefisecapp,cpucp,xbl_config,featenabler,shrm,qupfw,devcfg,aop_config,vbmeta,vbmeta_system
 
       - name: List Extracted Files
         run: |
