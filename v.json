@@ -47,4 +47,11 @@
   "vendor_boot_img_zip": "true",
   "app_settings_zip": "true"
 }
+,
+"miui_WATERINGlobal_V14.0.22.0.TGOINXM_d8ab6d66cf_13.0": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "false",
+  "vendor_boot_img_zip": "false",
+  "app_settings_zip": "false"
+}
 }
