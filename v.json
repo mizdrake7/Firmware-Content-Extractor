@@ -103,4 +103,11 @@
   "vendor_boot_img_zip": "true",
   "app_settings_zip": "true"
 }
+,
+"dada_global-ota_full-OS2.0.109.0.VOCMIXM-user-15.0-2627d9842e": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "true",
+  "vendor_boot_img_zip": "true",
+  "app_settings_zip": "true"
+}
 }
