@@ -75,4 +75,11 @@
   "vendor_boot_img_zip": "false",
   "app_settings_zip": "true"
 }
+,
+"fire_global-ota_full-OS2.0.5.0.VMXMIXM-user-15.0-0cffa9e4f8": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "false",
+  "vendor_boot_img_zip": "false",
+  "app_settings_zip": "true"
+}
 }
