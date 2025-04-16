@@ -96,4 +96,11 @@
   "vendor_boot_img_zip": "true",
   "app_settings_zip": "true"
 }
+,
+"peridot_global-ota_full-OS2.0.102.0.VNPMIXM-user-15.0-8f55fa6e7c": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "true",
+  "vendor_boot_img_zip": "true",
+  "app_settings_zip": "true"
+}
 }
