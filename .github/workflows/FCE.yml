@@ -11,6 +11,7 @@ on:
 env:
   URL: ${{ github.event.inputs.url }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  TELEGRAM_BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
 
 jobs:
   FCE:
@@ -41,7 +42,6 @@ jobs:
             7z x erofs-utils.zip -otools  
             pip install -r ./tools/requirements.txt  
             rm -f erofs-utils.zip  
-            
           fi  
 
       - name: download  
@@ -51,17 +51,11 @@ jobs:
           rm exrom.zip  
 
       - name: EC  
-        env:
-          API_ID: ${{ secrets.API_ID }}  
-          API_HASH: ${{ secrets.API_HASH }}  
-          PHONE: ${{ secrets.PHONE }}
         run: |
-          echo "${{ secrets.SESSION_FILE }}" | base64 -d > session_name.session
-
+          
           boot_img="false"
           init_boot="false"
           vendor_boot="false"
-          
 
           if [ -f "payload.bin" ]; then
             echo "payload.bin found, extracting images..."
@@ -74,6 +68,12 @@ jobs:
           fi
 
           rom_name=$(basename "$URL" .zip)
+          TELEGRAM_API="https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument"
+
+          BOOT_CHAT_ID="-1002613796115"
+          INIT_BOOT_CHAT_ID="-1002487209290"
+          VENDOR_BOOT_CHAT_ID="-1002551940450"
+
           for img in boot init_boot vendor_boot; do
             if [ -f "$img.img" ]; then
               7z a "${img}_img_${rom_name}.zip" "$img.img"
@@ -82,22 +82,29 @@ jobs:
             fi
           done
 
-
           if [ -f "boot_img_${rom_name}.zip" ]; then
-            python upload.py @boot_img_zip "boot_img_${rom_name}.zip"
+            curl -F chat_id="$BOOT_CHAT_ID" \
+                 -F document=@"boot_img_${rom_name}.zip" \
+                 -F caption="$rom_name" \
+                 "$TELEGRAM_API"
             boot_img="true"
           fi
 
           if [ -f "init_boot_img_${rom_name}.zip" ]; then
-            python upload.py @init_boot_img_zip "init_boot_img_${rom_name}.zip"
+            curl -F chat_id="$INIT_BOOT_CHAT_ID" \
+                 -F document=@"init_boot_img_${rom_name}.zip" \
+                 -F caption="$rom_name" \
+                 "$TELEGRAM_API"
             init_boot="true"
           fi
 
           if [ -f "vendor_boot_img_${rom_name}.zip" ]; then
-            python upload.py @vendor_boot_img_zip "vendor_boot_img_${rom_name}.zip"
+            curl -F chat_id="$VENDOR_BOOT_CHAT_ID" \
+                 -F document=@"vendor_boot_img_${rom_name}.zip" \
+                 -F caption="$rom_name" \
+                 "$TELEGRAM_API"
             vendor_boot="true"
           fi
-
 
           FILE="v.json"
           NEW_ENTRY='"'$rom_name'": {
@@ -106,7 +113,6 @@ jobs:
             "vendor_boot_img_zip": "'$vendor_boot'",
             "app_settings_zip": "'$settings_apk'"
           }'
-
 
           if [ ! -f "$FILE" ]; then
             echo -e "{\n$NEW_ENTRY\n}" > "$FILE"
@@ -124,31 +130,27 @@ jobs:
           echo "boot_img=$boot_img" >> output.env
           echo "init_boot=$init_boot" >> output.env
           echo "vendor_boot=$vendor_boot" >> output.env
-          
 
       - name: End of process
         run: |
-
           set -a
           source output.env
           set +a
 
           if [ "$boot_img" = "true" ]; then
-            echo "boot.img Available in: t.me/boot_img_zip"
+            echo "boot.img has been sent."
           else
             echo "boot.img is not available in this ROM."
           fi
 
           if [ "$init_boot" = "true" ]; then
-            echo "init_boot.img Available in: t.me/init_boot_img_zip"
+            echo "init_boot.img has been sent."
           else
             echo "init_boot.img is not available in this ROM."
           fi
 
           if [ "$vendor_boot" = "true" ]; then
-            echo "vendor_boot.img Available in: t.me/vendor_boot_img_zip"
+            echo "vendor_boot.img has been sent."
           else
             echo "vendor_boot.img is not available in this ROM."
-          fi
-
           fi
