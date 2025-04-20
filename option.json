@@ -1,6 +1,5 @@
 [
   "boot.img",
   "init_boot.img",
-  "vendor_boot.img",
-  "settings.apk"
+  "vendor_boot.img"
 ]
