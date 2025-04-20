@@ -124,4 +124,10 @@
   "vendor_boot_img_zip": "true",
   "app_settings_zip": ""
 }
+,
+"miui_RUBYGlobal_OS1.0.18.0.UMOMIXM_3201385a38_14.0": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "false",
+  "vendor_boot_img_zip": "false"
+}
 }
