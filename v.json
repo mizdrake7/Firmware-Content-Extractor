@@ -117,4 +117,11 @@
   "vendor_boot_img_zip": "false",
   "app_settings_zip": "true"
 }
+,
+"peridot_tw_global-ota_full-OS2.0.101.0.VNPTWXM-user-15.0-d6d6a8c00e.zip?t=1745041830&s=19658dcc9d065a6904c7f668a83e94fc": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "true",
+  "vendor_boot_img_zip": "true",
+  "app_settings_zip": ""
+}
 }
