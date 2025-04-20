@@ -1,5 +1,7 @@
 export default {
   async fetch(req, env) {
+    return new Response("\n Service under maintenance\n", { status: 400 });
+
     const urlParams = new URLSearchParams(req.url.split("?")[1]);
     let url = urlParams.get("url");
 
