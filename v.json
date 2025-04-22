@@ -142,4 +142,10 @@
   "init_boot_img_zip": "false",
   "vendor_boot_img_zip": "true"
 }
+,
+"miui_SAPPHIREGlobal_V14.0.10.0.TNGMIXM_ab7ae270a5_13.0": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "true",
+  "vendor_boot_img_zip": "true"
+}
 }
