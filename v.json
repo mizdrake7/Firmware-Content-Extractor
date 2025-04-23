@@ -160,4 +160,10 @@
   "init_boot_img_zip": "true",
   "vendor_boot_img_zip": "true"
 }
+,
+"PBRP-selene-4.0-20250206-0444-OFFICIAL": {
+  "boot_img_zip": "false",
+  "init_boot_img_zip": "false",
+  "vendor_boot_img_zip": "false"
+}
 }
