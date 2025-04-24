@@ -172,4 +172,10 @@
   "init_boot_img_zip": "true",
   "vendor_boot_img_zip": "true"
 }
+,
+"miui_BLUEGlobal_V816.0.1.0.VGRMIXM_f9d85c090f_15.0": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "false",
+  "vendor_boot_img_zip": "true"
+}
 }
