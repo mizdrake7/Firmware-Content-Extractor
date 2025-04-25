@@ -208,4 +208,10 @@
   "init_boot_img_zip": "false",
   "vendor_boot_img_zip": "true"
 }
+,
+"zircon_global-ota_full-OS2.0.8.0.VNOMIXM-user-15.0-e6871cbda3": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "true",
+  "vendor_boot_img_zip": "true"
+}
 }
