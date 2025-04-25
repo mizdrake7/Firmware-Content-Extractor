@@ -190,4 +190,10 @@
   "init_boot_img_zip": "false",
   "vendor_boot_img_zip": "true"
 }
+,
+"miui_LIGHTIDGlobal_V13.0.3.0.SLSIDXM_eab16ae757_12.0": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "false",
+  "vendor_boot_img_zip": "false"
+}
 }
