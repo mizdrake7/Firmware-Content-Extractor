@@ -244,4 +244,10 @@
   "init_boot_img_zip": "true",
   "vendor_boot_img_zip": "true"
 }
+,
+"miui_CHENFENGINGlobal_OS1.0.10.0.UNJINXM_5bc8e7a8e8_14.0": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "true",
+  "vendor_boot_img_zip": "true"
+}
 }
