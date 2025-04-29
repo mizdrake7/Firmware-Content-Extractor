@@ -238,4 +238,10 @@
   "init_boot_img_zip": "true",
   "vendor_boot_img_zip": "true"
 }
+,
+"sapphiren_id_global-ota_full-OS2.0.4.0.VNHIDXM-user-15.0-1995b45d8e": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "true",
+  "vendor_boot_img_zip": "true"
+}
 }
