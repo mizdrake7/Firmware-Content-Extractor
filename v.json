@@ -262,4 +262,10 @@
   "init_boot_img_zip": "false",
   "vendor_boot_img_zip": "false"
 }
+,
+"pipa_in_global-ota_full-OS2.0.1.0.UMZINXM-user-14.0-42941f8a5b": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "false",
+  "vendor_boot_img_zip": "true"
+}
 }
