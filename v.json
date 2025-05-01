@@ -304,4 +304,10 @@
   "init_boot_img_zip": "false",
   "vendor_boot_img_zip": "false"
 }
+,
+"xiaomi.eu_SAPPHIREN_OS2.0.10.0.VNHMIXM_15": {
+  "boot_img_zip": "false",
+  "init_boot_img_zip": "false",
+  "vendor_boot_img_zip": "false"
+}
 }
