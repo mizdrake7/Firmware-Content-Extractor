@@ -316,4 +316,10 @@
   "init_boot_img_zip": "false",
   "vendor_boot_img_zip": "false"
 }
+,
+"Hyperos-lisa-14-OS2.0.2.0.UKOCNXM-AB-20250413-MysticGSI": {
+  "boot_img_zip": "false",
+  "init_boot_img_zip": "false",
+  "vendor_boot_img_zip": "false"
+}
 }
