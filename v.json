@@ -424,4 +424,10 @@
   "init_boot_img_zip": "true",
   "vendor_boot_img_zip": "true"
 }
+,
+"peridot_id_global-ota_full-OS2.0.101.0.VNPIDXM-user-15.0-8201caa8d4": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "true",
+  "vendor_boot_img_zip": "true"
+}
 }
