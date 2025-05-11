@@ -430,4 +430,10 @@
   "init_boot_img_zip": "true",
   "vendor_boot_img_zip": "true"
 }
+,
+"miui_SURYAGlobal_V14.0.2.0.SJGMIXM_9aaad01ef3_12.0": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "false",
+  "vendor_boot_img_zip": "false"
+}
 }
