@@ -520,4 +520,10 @@
   "init_boot_img_zip": "false",
   "vendor_boot_img_zip": "true"
 }
+,
+"PixelExperience_Plus_ginkgo-12.1-20221118-0221-OFFICIAL": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "false",
+  "vendor_boot_img_zip": "false"
+}
 }
