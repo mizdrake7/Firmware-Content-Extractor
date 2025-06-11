@@ -580,4 +580,10 @@
   "init_boot_img_zip": "false",
   "vendor_boot_img_zip": "false"
 }
+,
+"miui_EARTHINGlobal_OS1.0.7.0.UCVINXM_72384ccb4b_14.0": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "false",
+  "vendor_boot_img_zip": "false"
+}
 }
