@@ -592,4 +592,10 @@
   "init_boot_img_zip": "false",
   "vendor_boot_img_zip": "false"
 }
+,
+"lake_global-ota_full-OS2.0.3.0.VGTMIXM-user-15.0-b69c2238cb": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "true",
+  "vendor_boot_img_zip": "true"
+}
 }
