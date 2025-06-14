@@ -622,4 +622,10 @@
   "init_boot_img_zip": "true",
   "vendor_boot_img_zip": "true"
 }
+,
+"rothko_eea_global-ota_full-OS2.0.105.0.VNNEUXM-user-15.0-5c530b25e2": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "true",
+  "vendor_boot_img_zip": "true"
+}
 }
