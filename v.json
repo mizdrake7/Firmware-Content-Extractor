@@ -634,4 +634,10 @@
   "init_boot_img_zip": "false",
   "vendor_boot_img_zip": "false"
 }
+,
+"degas_id_global-ota_full-OS2.0.102.0.VNEIDXM-user-15.0-b96652c152": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "true",
+  "vendor_boot_img_zip": "true"
+}
 }
