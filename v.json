@@ -646,4 +646,10 @@
   "init_boot_img_zip": "false",
   "vendor_boot_img_zip": "false"
 }
+,
+"gale_global-ota_full-OS2.0.4.0.VGPMIXM-user-15.0-13a2452806": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "false",
+  "vendor_boot_img_zip": "false"
+}
 }
