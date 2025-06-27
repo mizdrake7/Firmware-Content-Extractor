@@ -724,4 +724,10 @@
   "init_boot_img_zip": "false",
   "vendor_boot_img_zip": "false"
 }
+,
+"miui_MONDRIANGlobal_V14.0.4.0.TMNMIXM_80961dabba_13.0": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "false",
+  "vendor_boot_img_zip": "true"
+}
 }
