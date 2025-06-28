@@ -748,4 +748,10 @@
   "init_boot_img_zip": "false",
   "vendor_boot_img_zip": "true"
 }
+,
+"marble_id_global-ota_full-OS2.0.4.0.VMRIDXM-user-15.0-20ec76a77f": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "false",
+  "vendor_boot_img_zip": "true"
+}
 }
