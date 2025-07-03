@@ -790,4 +790,10 @@
   "init_boot_img_zip": "true",
   "vendor_boot_img_zip": "true"
 }
+,
+"pipa_global-ota_full-OS2.0.5.0.UMZMIXM-user-14.0-dc3e883449": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "false",
+  "vendor_boot_img_zip": "true"
+}
 }
