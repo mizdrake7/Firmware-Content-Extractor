@@ -826,4 +826,10 @@
   "init_boot_img_zip": "false",
   "vendor_boot_img_zip": "true"
 }
+,
+"boot_img_miui_MALACHITEGlobal_OS1.0.10.0.UOOMIXM_ba11bb65ab_14.0": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "false",
+  "vendor_boot_img_zip": "false"
+}
 }
