@@ -886,4 +886,10 @@
   "init_boot_img_zip": "true",
   "vendor_boot_img_zip": "true"
 }
+,
+"rodin_global-ota_full-OS2.0.104.0.VOJMIXM-user-15.0-681f6c5397": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "true",
+  "vendor_boot_img_zip": "true"
+}
 }
