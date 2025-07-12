@@ -976,4 +976,10 @@
   "init_boot_img_zip": "false",
   "vendor_boot_img_zip": "false"
 }
+,
+"rothko_global-ota_full-OS2.0.202.0.VNNMIXM-user-15.0-1dd722cdf2": {
+  "boot_img_zip": "true",
+  "init_boot_img_zip": "true",
+  "vendor_boot_img_zip": "true"
+}
 }
